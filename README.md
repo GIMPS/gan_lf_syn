@@ -1,5 +1,6 @@
-# Learning-Based View Synthesis for Light Field Cameras - Pytorch
+# GAN Optimized Learning-Based View Synthesis for Light Field Cameras - Pytorch
 A PyTorch implementation of a LF Camera View Synthesis method proposed by SIGGRAPH Asia 2016 paper [Learning-Based View Synthesis for Light Field Cameras](http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/SIGASIA16/).
+Improved further with GAN proposed by [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://arxiv.org/abs/1609.04802).
 ## Requirments
 - Python 3.x
 - CUDA 8.0
@@ -41,7 +42,7 @@ python3 prepare_data.py
 ``` 
 Then start the training
 ```
-python3 train.py
+python3 train_gan.py
 
 optional arguments:
 --is_continue                   if to continue training from existing network[default value is False]
@@ -52,6 +53,6 @@ The trained network, PSNR value and loss plot are in `TrainingData` directory.
 Copy desired png files into `Scenes` folder. The results shown in the paper
 can be found in `TestSet\PAPER` directory.
 ```
-python3 test.py
+python3 test_gan.py
 ```
 The output images and objective quality result are in `Results` directory.
