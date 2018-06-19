@@ -1,6 +1,6 @@
 # GAN Optimized Learning-Based View Synthesis for Light Field Cameras - Pytorch
-A PyTorch implementation of a LF Camera View Synthesis method proposed by SIGGRAPH Asia 2016 paper [Learning-Based View Synthesis for Light Field Cameras](http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/SIGASIA16/).
-Improved further with GAN proposed by [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://arxiv.org/abs/1609.04802).
+A PyTorch implementation of a LF Camera View Synthesis method proposed by a SIGGRAPH Asia 2016 paper [Learning-Based View Synthesis for Light Field Cameras](http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/SIGASIA16/).
+Improved further with GAN proposed by a CVPR 2017 paper [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://arxiv.org/abs/1609.04802).
 ## Requirments
 - Python 3.x
 - CUDA 8.0
