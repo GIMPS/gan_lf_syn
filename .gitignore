@@ -1,0 +1,10 @@
+*.h5
+*.png
+.DS_Store
+__pycache__/
+.idea/
+try.py
+TrainingData/*
+Scenes/*
+Results/*
+!.gitkeep
