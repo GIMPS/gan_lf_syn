@@ -188,8 +188,10 @@ def evaluate_system(depth_net, color_net, depth_optimizer=None, color_optimizer=
 
         depth_optimizer.zero_grad()
         color_optimizer.zero_grad()
-
-        loss.backward(torch.ones(10, 3, 36, 36))
+        if param.useGPU:
+            loss.backward(torch.ones(10, 3, 36, 36).cuda())
+        else:
+            loss.backward(torch.ones(10, 3, 36, 36))
 
         dzdx = colorFeatures.grad
         dzdx = dzdx.data.permute(2, 3, 1, 0)
