@@ -1,8 +1,6 @@
-import warnings
-
+import pytorch_ssim
 from init_param import novelView
 from prepare_data import *
-import pytorch_ssim
 
 warnings.filterwarnings("ignore")
 from train_gan import load_networks, read_illum_images, evaluate_system, compute_psnr
@@ -28,8 +26,8 @@ def get_img_ind(inPos):
 
 def write_error(estimated, reference, resultPath):
     curPSNR = compute_psnr(estimated, reference)
-    estimated = Variable(torch.from_numpy(np.expand_dims(estimated,axis=3)).permute(3,2,0,1).float())
-    reference = Variable(torch.from_numpy(np.expand_dims(reference,axis=3)).permute(3,2,0,1).float())
+    estimated = Variable(torch.from_numpy(np.expand_dims(estimated, axis=3)).permute(3, 2, 0, 1).float())
+    reference = Variable(torch.from_numpy(np.expand_dims(reference, axis=3)).permute(3, 2, 0, 1).float())
     curSSIM = pytorch_ssim.ssim(estimated, reference).data[0]
 
     fid = open(resultPath + '/ObjectiveQuality_GAN.txt', 'w')

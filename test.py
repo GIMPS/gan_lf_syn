@@ -1,5 +1,3 @@
-import warnings
-
 from init_param import novelView
 from prepare_data import *
 
@@ -28,8 +26,8 @@ def get_img_ind(inPos):
 
 def write_error(estimated, reference, resultPath):
     curPSNR = compute_psnr(estimated, reference)
-    estimated = Variable(torch.from_numpy(np.expand_dims(estimated,axis=3)).permute(3,2,0,1).float())
-    reference = Variable(torch.from_numpy(np.expand_dims(reference,axis=3)).permute(3,2,0,1).float())
+    estimated = Variable(torch.from_numpy(np.expand_dims(estimated, axis=3)).permute(3, 2, 0, 1).float())
+    reference = Variable(torch.from_numpy(np.expand_dims(reference, axis=3)).permute(3, 2, 0, 1).float())
     curSSIM = pytorch_ssim.ssim(estimated, reference).data[0]
 
     fid = open(resultPath + '/ObjectiveQuality.txt', 'w')
@@ -60,7 +58,6 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         curEst = crop_img(synthesizedView, 10)
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
 
-
         # write the numerical evaluation and the final image
         if indY == 0 and indX == 0:
             write_error(curEst, curRef, resultPath)
@@ -85,7 +82,7 @@ def test():
         resultPath = resultFolder + '/' + sceneNames[ns][0:- 4]
         make_dir(resultPath + '/Images')
 
-        print('Loading input light field ...',end = '')
+        print('Loading input light field ...', end='')
         [curFullLF, curInputLF] = read_illum_images(scenePaths[ns])
         print('Done')
         print('**********************************')
