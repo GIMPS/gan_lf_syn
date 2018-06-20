@@ -190,7 +190,7 @@ def evaluate_system(depth_net, color_net, d_net=None, depth_optimizer=None, colo
     colorRes = color_net(colorFeatures)
 
     finalImg = colorRes
-    finalImg = np.transpose(finalImg.data.numpy(), (2, 3, 1, 0))
+    finalImg = np.transpose(finalImg.data.cpu().numpy(), (2, 3, 1, 0))
 
     if not isTraining:
         print('Done in {:.0f} seconds'.format(time.time() - cfTime))
@@ -246,7 +246,7 @@ def test_during_training(depth_net, color_net, d_net, depth_optimizer, color_opt
                                    criterion, images, refPos, True,
                                    depthFeatures, reference, True)
 
-        reference = reference.numpy()
+        reference = reference.cpu().numpy()
         finalImg = crop_img(finalImg, 10)
         reference = crop_img(reference, 10)
 
