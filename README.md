@@ -39,6 +39,9 @@ to be created first.
 ```
 python3 prepare_data.py
 
+optional arguments:
+--dataset                       choose which dataset to process
+
 ``` 
 Then start the training
 ```
