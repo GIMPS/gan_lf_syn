@@ -357,7 +357,7 @@ def prepare_training_data():
 
     for ns in range(0, numScenes):
         print('**********************************')
-        print('Working on the "%s" dataset (%d of %d)' % (sceneNames[ns][0:- 4], ns, numScenes),flush=True)
+        print('Working on the "%s" dataset (%d of %d)' % (sceneNames[ns][0:- 4], ns+1, numScenes),flush=True)
 
         print('Loading input light field ...',end = ' ')
         curFullLF, curInputLF = read_illum_images(scenePaths[ns])
