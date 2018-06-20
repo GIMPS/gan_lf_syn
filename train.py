@@ -291,9 +291,9 @@ def train_system(depth_net, color_net, depth_optimizer, color_optimizer, criteri
             print('Starting the validation process... ', end='', flush=True)
             curError = test_during_training(depth_net, color_net, depth_optimizer, color_optimizer, criterion)
             testError.append(curError)
-            plt.plot(testError)
-            plt.title('Current PSNR: %f' % curError)
-            plt.savefig(param.trainNet + '/fig.png')
+            # plt.plot(testError)
+            # plt.title('Current PSNR: %f' % curError)
+            # plt.savefig(param.trainNet + '/fig.png')
 
         it += 1
 
