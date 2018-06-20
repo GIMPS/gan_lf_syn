@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser(description='Train Super Resolution Models')
 parser.add_argument('--is_continue', default=False, type=bool, help='if to continue training from existing network')
 opt = parser.parse_args()
 param.isContinue = opt.is_continue
+
 def load_networks(isTraining=False):
     depth_net = DepthNetModel()
     color_net = ColorNetModel()
