@@ -310,11 +310,9 @@ def train_system(depth_net, color_net, d_net, depth_optimizer, color_optimizer, 
             curError = test_during_training(depth_net, color_net, d_net, depth_optimizer, color_optimizer, d_optimizer,
                                             criterion)
             testError.append(curError)
-            plt.figure()
             plt.plot(testError)
             plt.title('Current PSNR: %f' % curError)
             plt.savefig(param.trainNet + '/fig_gan.png')
-            # plt.show()
         it += 1
 
 
