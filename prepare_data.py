@@ -99,7 +99,6 @@ def save_hdf(f, datasetName, input, inDims, startLoc, createFlag, arraySize=1):
 
 
 def warp_images(disparity, input, delY, delX):
-    input = input.cpu().numpy()
     [h, w, _, numImages] = disparity.shape
     X = np.arange(0, w, dtype='float')
     Y = np.arange(0, h, dtype='float')
