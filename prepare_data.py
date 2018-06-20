@@ -123,7 +123,7 @@ def warp_images(disparity, input, delY, delX):
 def warp_all_images(images, depth, refPos):
     images = images.cpu().numpy()
     depth = depth.cpu().numpy()
-    refPos = refPos.cpu.numpy()
+    refPos = refPos.cpu().numpy()
     [h, w, c, numImages] = images.shape
     numInputViews = len(inputView.Y)
 
