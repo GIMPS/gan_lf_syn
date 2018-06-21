@@ -191,7 +191,7 @@ def evaluate_system(depth_net, color_net, d_net=None, depth_optimizer=None, colo
     colorRes = color_net(colorFeatures)
 
     finalImg = colorRes
-    finalImg = np.transpose(finalImg.data.cpu().numpy(), (2, 3, 1, 0))
+    finalImg = finalImg.data.permute(2, 3, 1, 0)
 
     if not isTraining:
         print('Done in {:.0f} seconds'.format(time.time() - cfTime))
@@ -227,7 +227,7 @@ def evaluate_system(depth_net, color_net, d_net=None, depth_optimizer=None, colo
 
 
 def compute_psnr(input, ref):
-    numPixels = input.size
+    numPixels = input.numel()
     sqrdErr = torch.sum((input[:] - ref[:]) ** 2) / numPixels
     errEst = 10 * log10(1 / sqrdErr)
     return errEst
