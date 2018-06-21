@@ -53,6 +53,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         synthesizedView = evaluate_system(depth_net, color_net, images=inputLF, refPos=curRefPos)
 
         synthesizedView = synthesizedView[:, :, :, -1]
+        print(synthesizedView.shape)
         # crop the result and reference images
         curEst = crop_img(synthesizedView, 10)
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
