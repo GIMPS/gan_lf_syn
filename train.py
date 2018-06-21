@@ -9,9 +9,6 @@ from prepare_data import *
 from math import log10
 warnings.filterwarnings("ignore")
 import h5py
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg')
 
 parser = argparse.ArgumentParser(description='Train Super Resolution Models')
 parser.add_argument('--is_continue', default=False, type=bool, help='if to continue training from existing network')

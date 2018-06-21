@@ -1,6 +1,8 @@
 # GAN Optimized Learning-Based View Synthesis for Light Field Cameras - Pytorch
 A PyTorch implementation of a LF Camera View Synthesis method proposed by a SIGGRAPH Asia 2016 paper [Learning-Based View Synthesis for Light Field Cameras](http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/SIGASIA16/).
 Improved further with GAN proposed by a CVPR 2017 paper [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://arxiv.org/abs/1609.04802).
+
+See the original implementation [here](https://github.com/GIMPS/lf_syn).
 ## Requirments
 - Python 3.x
 - CUDA
@@ -11,7 +13,6 @@ Improved further with GAN proposed by a CVPR 2017 paper [Photo-Realistic Single 
 - scipy
 - numpy
 - scikit-image
-- matplotlib
 - h5py
 ```angular2html
 pip3 install -r requirments.txt
@@ -50,7 +51,7 @@ python3 train_gan.py
 optional arguments:
 --is_continue                   if to continue training from existing network[default value is False]
 ```
-The trained network, PSNR value and loss plot are in `TrainingData` directory.
+The trained network and PSNR log are in `TrainingData` directory.
 
 ### Test Single Image
 Copy desired png files into `Scenes` folder. The results shown in the paper
@@ -59,3 +60,8 @@ can be found in `TestSet\PAPER` directory.
 python3 test_gan.py
 ```
 The output images and objective quality result are in `Results` directory.
+
+## To do list:
+- Move `prepare_data.py` onto GPU
+
+   This will make training and testing tremendously faster. The key is to implement a cubic `interpolation` method with PyToch tensors to replace the Scipy one.

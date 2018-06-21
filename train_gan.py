@@ -9,8 +9,6 @@ from math import log10
 
 warnings.filterwarnings("ignore")
 import h5py
-import matplotlib.pyplot as plt
-
 from loss import GeneratorLoss
 
 parser = argparse.ArgumentParser(description='Train Super Resolution Models')
