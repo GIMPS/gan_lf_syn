@@ -5,6 +5,7 @@ from torch.autograd import Variable
 
 from model import DepthNetModel, ColorNetModel, Discriminator
 from prepare_data import *
+from math import log10
 
 warnings.filterwarnings("ignore")
 import h5py
@@ -227,8 +228,8 @@ def evaluate_system(depth_net, color_net, d_net=None, depth_optimizer=None, colo
 
 def compute_psnr(input, ref):
     numPixels = input.size
-    sqrdErr = np.sum((input[:] - ref[:]) ** 2) / numPixels
-    errEst = 10 * np.log10(1 / sqrdErr)
+    sqrdErr = torch.sum((input[:] - ref[:]) ** 2) / numPixels
+    errEst = 10 * log10(1 / sqrdErr)
     return errEst
 
 
@@ -246,10 +247,8 @@ def test_during_training(depth_net, color_net, d_net, depth_optimizer, color_opt
                                    criterion, images, refPos, True,
                                    depthFeatures, reference, True)
 
-        reference = reference.cpu().numpy()
         finalImg = crop_img(finalImg, 10)
         reference = crop_img(reference, 10)
-
         curError = compute_psnr(finalImg, reference)
         error = error + curError / numScenes
     print('Current PSNR: %.3f' % error)
