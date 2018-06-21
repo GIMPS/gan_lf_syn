@@ -60,7 +60,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
 
         # performs the whole process of extracting features, evaluating the
         # two sequential networks and generating the output synthesized image
-        print('View %02d of %02d' % (vi, numNovelViews))
+        print('View %02d of %02d' % (vi+1, numNovelViews))
         print('**********************************')
         synthesizedView = evaluate_system(depth_net, color_net, images=inputLF, refPos=curRefPos)
 
@@ -70,7 +70,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
 
         # write the numerical evaluation and the final image
-        if indY == 0 and indX == 0:
+        if indY == 5 and indX == 5:
             write_error(curEst, curRef, resultPath)
         imwrite(resultPath + '/Images/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
 
