@@ -39,8 +39,7 @@ def write_error(estimated, reference, resultPath):
 def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
     numNovelViews = len(novelView.Y)
 
-    # for vi in range(numNovelViews):
-    for vi in range(1):
+    for vi in range(numNovelViews):
         indY = get_img_ind(novelView.Y[vi])
         indX = get_img_ind(novelView.X[vi])
 
