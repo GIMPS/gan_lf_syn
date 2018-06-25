@@ -72,7 +72,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         # write the numerical evaluation and the final image
         if indY == 5 and indX == 5:
             write_error(curEst, curRef, resultPath)
-        imwrite(resultPath + '/Images/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
+        imwrite(resultPath + '/Images_GAN/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
 
 def test_gan():
     # Initialization
