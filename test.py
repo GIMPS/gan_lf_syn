@@ -86,7 +86,7 @@ def test():
 
     for ns in range(numScenes):
         print('**********************************')
-        print('Working on the ' + sceneNames[ns][0:- 4] + 'dataset')
+        print('Working on the ' + sceneNames[ns][0:- 4] + ' dataset')
 
         resultPath = resultFolder + '/' + sceneNames[ns][0:- 4]
         make_dir(resultPath + '/Images')
