@@ -70,7 +70,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
 
         # write the numerical evaluation and the final image
-        if indY == 5 and indX == 5:
+        if indY == 4 and indX == 4:
             write_error(curEst, curRef, resultPath)
         imwrite(resultPath + '/Images_GAN/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
 
