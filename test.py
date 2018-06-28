@@ -48,8 +48,8 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         indY = get_img_ind(novelView.Y[vi])
         indX = get_img_ind(novelView.X[vi])
 
-        curRefPos = np.array([novelView.Y[vi], novelView.X[vi]])
-        curRefPos = np.expand_dims(curRefPos, axis=1)
+        curRefPos = np.array([[novelView.Y[vi], novelView.X[vi]]])
+        # curRefPos = np.expand_dims(curRefPos, axis=1)
         if param.useGPU:
             curRefPos = torch.from_numpy(curRefPos).cuda().float()
         else:
@@ -66,7 +66,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
 
         curEst = crop_img(synthesizedView, 10)
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
-
+        print(compute_psnr(curEst, curRef))
         # write the numerical evaluation and the final image
         if indY == 4 and indX == 4:
             write_error(curEst, curRef, resultPath)
