@@ -65,7 +65,6 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
 
         curEst = crop_img(synthesizedView, 10)
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
-        print(compute_psnr(curEst, curRef))
         # write the numerical evaluation and the final image
         psnr_ls.append(compute_psnr(curEst, curRef))
         estimated = Variable(curEst.unsqueeze(3).permute(3, 2, 0, 1))

@@ -24,17 +24,13 @@ def get_img_ind(inPos):
     return ind
 
 
-def write_error(estimated, reference, resultPath):
-    curPSNR = compute_psnr(estimated, reference)
-    estimated = Variable(estimated.unsqueeze(3).permute(3, 2, 0, 1))
-    reference = Variable(reference.unsqueeze(3).permute(3, 2, 0, 1))
-    curSSIM = pytorch_ssim.ssim(estimated, reference).data[0]
-
+def write_error(psnr_ls, ssim_ls, resultPath):
+    curPSNR = sum(psnr_ls)/len(psnr_ls)
+    curSSIM = sum(ssim_ls)/len(ssim_ls)
     fid = open(resultPath + '/ObjectiveQuality_GAN.txt', 'w')
     fid.write('PSNR: %3.2f\n' % curPSNR)
     fid.write('SSIM: %1.3f\n' % curSSIM)
     fid.close()
-
 
 def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
     numNovelViews = len(novelView.Y)
@@ -46,12 +42,14 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         inputLF = torch.from_numpy(inputLF).float()
         fullLF = torch.from_numpy(fullLF).float()
 
+    psnr_ls = []
+    ssim_ls = []
+
     for vi in range(numNovelViews):
         indY = get_img_ind(novelView.Y[vi])
         indX = get_img_ind(novelView.X[vi])
 
-        curRefPos = np.array([novelView.Y[vi], novelView.X[vi]])
-        curRefPos = np.expand_dims(curRefPos, axis=1)
+        curRefPos = np.array([[novelView.Y[vi]], [novelView.X[vi]]])
 
         if param.useGPU:
             curRefPos = torch.from_numpy(curRefPos).cuda().float()
@@ -70,9 +68,12 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
 
         # write the numerical evaluation and the final image
-        if indY == 4 and indX == 4:
-            write_error(curEst, curRef, resultPath)
+        psnr_ls.append(compute_psnr(curEst, curRef))
+        estimated = Variable(curEst.unsqueeze(3).permute(3, 2, 0, 1))
+        reference = Variable(curRef.unsqueeze(3).permute(3, 2, 0, 1))
+        ssim_ls.append(pytorch_ssim.ssim(estimated, reference).data[0])
         imwrite(resultPath + '/Images_GAN/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
+    write_error(psnr_ls, ssim_ls, resultPath)
 
 def test_gan():
     # Initialization
