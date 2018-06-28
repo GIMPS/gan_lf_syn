@@ -48,7 +48,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         indY = get_img_ind(novelView.Y[vi])
         indX = get_img_ind(novelView.X[vi])
 
-        curRefPos = np.array([[novelView.Y[vi], novelView.X[vi]]])
+        curRefPos = np.array([[novelView.Y[vi]], [novelView.X[vi]]])
         # curRefPos = np.expand_dims(curRefPos, axis=1)
         if param.useGPU:
             curRefPos = torch.from_numpy(curRefPos).cuda().float()
