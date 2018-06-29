@@ -20,7 +20,7 @@ def adjust_tone(input):
 
 
 def get_img_ind(inPos):
-    ind = round(inPos * (param.origAngRes - 1))
+    ind = int(round(inPos * (param.origAngRes - 1)))
     return ind
 
 
