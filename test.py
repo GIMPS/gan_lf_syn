@@ -10,13 +10,14 @@ from cv2 import imwrite
 
 
 def adjust_tone(input):
-    input[input > 1] = 1
-    input[input < 0] = 0
-    output = input ** (1 / 1.5)
-    # output = rgb2hsv(output)
-    # output[:, :, 1] = output[:, :, 1] * 1.5
-    # output = hsv2rgb(output)
-    return output
+    # input[input > 1] = 1
+    # input[input < 0] = 0
+    # output = input ** (1 / 1.5)
+    # # output = rgb2hsv(output)
+    # # output[:, :, 1] = output[:, :, 1] * 1.5
+    # # output = hsv2rgb(output)
+    # return output
+    return input
 
 
 def get_img_ind(inPos):
