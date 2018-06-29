@@ -10,14 +10,13 @@ from cv2 import imwrite
 
 
 def adjust_tone(input):
-    # input[input > 1] = 1
-    # input[input < 0] = 0
-    # output = input ** (1 / 1.5)
-    # # output = rgb2hsv(output)
-    # # output[:, :, 1] = output[:, :, 1] * 1.5
-    # # output = hsv2rgb(output)
-    # return output
-    return input
+    input[input > 1] = 1
+    input[input < 0] = 0
+    output = input ** (1 / 1.5)
+    output = rgb2hsv(output)
+    output[:, :, 1] = output[:, :, 1] * 1.5
+    output = hsv2rgb(output)
+    return output
 
 
 def get_img_ind(inPos):
@@ -70,7 +69,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         # write the numerical evaluation and the final image
         if indY == 4 and indX == 4:
             write_error(curEst, curRef, resultPath)
-        imwrite(resultPath + '/Images/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
+        imwrite(resultPath + '/Images/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(cv2.COLOR_RGB2BGR(curEst.cpu().numpy())) * 255).astype(int))
 
 
 def test():

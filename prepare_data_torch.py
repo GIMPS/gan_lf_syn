@@ -139,8 +139,9 @@ def warp_images(disparity, input, delY, delX):
     XX = X.view(-1, 1).repeat(1, 4)
     YY = Y.repeat(4, 1)
     points = generate_grid(h * w, 2)
-    points[:, 0] = torch.view(XX.size(0), -1)
-    points[:, 1] = torch.view(YY.size(0), -1)
+    print(XX.shape)
+    points[:, 0] = XX.view(-1,1)
+    points[:, 1] = YY.view(-1,1)
     c = input.shape[2]
     output = np.zeros((h, w, c, numImages), 'float')
 
@@ -148,7 +149,7 @@ def warp_images(disparity, input, delY, delX):
         for i in range(0, c):
             curX = XX + delX[j] * disparity[:, :, 0, j]
             curY = YY + delY[j] * disparity[:, :, 0, j]
-            output[:, :, i, j] = bilinear_interpolate_torch(points, torch.view(input[:, :, i, j].size(0),-1), (curX, curY))
+            output[:, :, i, j] = bilinear_interpolate_torch(points, input.view(-1,1), (curX, curY))
 
     return output
 
