@@ -5,7 +5,7 @@ import torch.optim as optim
 from torch.autograd import Variable
 
 from model import DepthNetModel, ColorNetModel
-from prepare_data_torch import *
+from prepare_data import *
 from math import log10
 warnings.filterwarnings("ignore")
 import h5py
