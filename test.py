@@ -13,20 +13,23 @@ def adjust_tone(input):
     input[input > 1] = 1
     input[input < 0] = 0
     output = input ** (1 / 1.5)
-    output = rgb2hsv(output)
-    output[:, :, 1] = output[:, :, 1] * 1.5
-    output = hsv2rgb(output)
+    # output = rgb2hsv(output)
+    # output[:, :, 1] = output[:, :, 1] * 1.5
+    # output = hsv2rgb(output)
     return output
 
 
 def get_img_ind(inPos):
-    ind = int(inPos * (param.origAngRes - 1))
+    ind = round(inPos * (param.origAngRes - 1))
     return ind
 
 
-def write_error(psnr_ls, ssim_ls, resultPath):
-    curPSNR = sum(psnr_ls)/len(psnr_ls)
-    curSSIM = sum(ssim_ls)/len(ssim_ls)
+def write_error(estimated, reference, resultPath):
+    curPSNR = compute_psnr(estimated, reference)
+    estimated = Variable(estimated.unsqueeze(3).permute(3, 2, 0, 1))
+    reference = Variable(reference.unsqueeze(3).permute(3, 2, 0, 1))
+    curSSIM = pytorch_ssim.ssim(estimated, reference).data[0]
+
     fid = open(resultPath + '/ObjectiveQuality.txt', 'w')
     fid.write('PSNR: %3.2f\n' % curPSNR)
     fid.write('SSIM: %1.3f\n' % curSSIM)
@@ -41,8 +44,6 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
     else:
         inputLF = torch.from_numpy(inputLF).float()
         fullLF = torch.from_numpy(fullLF).float()
-    psnr_ls = []
-    ssim_ls = []
     for vi in range(numNovelViews):
         indY = get_img_ind(novelView.Y[vi])
         indX = get_img_ind(novelView.X[vi])
@@ -66,12 +67,9 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         curEst = crop_img(synthesizedView, 10)
         curRef = crop_img(fullLF[:, :, :, indY, indX], param.depthBorder + param.colorBorder + 10)
         # write the numerical evaluation and the final image
-        psnr_ls.append(compute_psnr(curEst, curRef))
-        estimated = Variable(curEst.unsqueeze(3).permute(3, 2, 0, 1))
-        reference = Variable(curRef.unsqueeze(3).permute(3, 2, 0, 1))
-        ssim_ls.append(pytorch_ssim.ssim(estimated, reference).data[0])
+        if indY == 4 and indX == 4:
+            write_error(curEst, curRef, resultPath)
         imwrite(resultPath + '/Images/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(curEst.cpu().numpy()) * 255).astype(int))
-    write_error(psnr_ls, ssim_ls, resultPath)
 
 
 def test():

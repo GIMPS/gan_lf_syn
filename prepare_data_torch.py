@@ -7,7 +7,6 @@ from math import floor
 import cv2
 import numpy as np
 import torch
-import torch.functional as F
 from scipy.interpolate import *
 
 from init_param import param, inputView, get_folder_content
@@ -18,6 +17,12 @@ import h5py
 import torch
 dtype = torch.cuda.FloatTensor
 dtype_long = torch.cuda.LongTensor
+
+def generate_grid(h, w):
+    x = torch.range(0, h-1)
+    y = torch.range(0, w-1)
+    grid = torch.stack([x.repeat(w), y.repeat(h,1).t().contiguous().view(-1)],1)
+    return grid
 
 def bilinear_interpolate_torch(im, x, y):
     x0 = torch.floor(x).type(dtype_long)
@@ -129,12 +134,13 @@ def save_hdf(f, datasetName, input, inDims, startLoc, createFlag, arraySize=1):
 
 def warp_images(disparity, input, delY, delX):
     [h, w, _, numImages] = disparity.shape
-    X = np.arange(0, w, dtype='float')
-    Y = np.arange(0, h, dtype='float')
-    XX, YY = np.meshgrid(X, Y)
-    points = np.zeros((h * w, 2))
-    points[:, 0] = XX.flatten()
-    points[:, 1] = YY.flatten()
+    X = torch.arange(0, w)
+    Y = torch.arange(0, h)
+    XX = X.view(-1, 1).repeat(1, 4)
+    YY = Y.repeat(4, 1)
+    points = generate_grid(h * w, 2)
+    points[:, 0] = torch.view(XX.size(0), -1)
+    points[:, 1] = torch.view(YY.size(0), -1)
     c = input.shape[2]
     output = np.zeros((h, w, c, numImages), 'float')
 
@@ -142,19 +148,16 @@ def warp_images(disparity, input, delY, delX):
         for i in range(0, c):
             curX = XX + delX[j] * disparity[:, :, 0, j]
             curY = YY + delY[j] * disparity[:, :, 0, j]
-            output[:, :, i, j] = bilinear_interpolate_torch(points, input[:, :, i, j].flatten(), (curX, curY))
+            output[:, :, i, j] = bilinear_interpolate_torch(points, torch.view(input[:, :, i, j].size(0),-1), (curX, curY))
 
     return output
 
 
 def warp_all_images(images, depth, refPos):
-    images = images.cpu().numpy()
-    depth = depth.cpu().numpy()
-    refPos = refPos.cpu().numpy()
     [h, w, c, numImages] = images.shape
     numInputViews = len(inputView.Y)
 
-    warpedImages = np.zeros((h, w, c, numImages), 'float')
+    warpedImages = torch.zeros((h, w, c, numImages))
     for i in range(0, numInputViews):
         deltaY = inputView.Y[i] - refPos[0]
         deltaX = inputView.X[i] - refPos[1]
@@ -178,16 +181,16 @@ def prepare_depth_features(inputLF, deltaY, deltaX):
         for j in range(0, angWidth):
             grayLF[:, :, i, j] = rgb2gray(inputLF[:, :, :, i, j])
 
-    defocusStack = torch.zeros((height, width, depthResolution))
-    correspStack = torch.zeros((height, width, depthResolution))
-    featuresStack = torch.zeros((height, width, 200))
+    defocusStack = np.zeros((height, width, depthResolution))
+    correspStack = np.zeros((height, width, depthResolution))
+    featuresStack = np.zeros((height, width, 200))
     delta = 2 * deltaDisparity / (depthResolution - 1)
     indDepth = 0
 
-    for curDepth in torch.arange(- deltaDisparity, deltaDisparity + delta, delta):
-        shearedLF = torch.zeros((height, width, angHeight * angWidth))
-        X = torch.arange(0, width)
-        Y = torch.arange(0, height)
+    for curDepth in np.arange(- deltaDisparity, deltaDisparity + delta, delta):
+        shearedLF = np.zeros((height, width, angHeight * angWidth))
+        X = np.arange(0, width)
+        Y = np.arange(0, height)
 
         # backward warping all the input images using each depth level (see Eq. 5)
 
@@ -196,7 +199,7 @@ def prepare_depth_features(inputLF, deltaY, deltaX):
             for iay in range(0, angHeight):
                 curY = Y + curDepth * deltaY[indView]
                 curX = X + curDepth * deltaX[indView]
-                ip = bilinear_interpolate_torch(X, Y, grayLF[:, :, iay, iax])
+                ip = interp2d(X, Y, grayLF[:, :, iay, iax], kind='cubic', fill_value=np.nan)
                 shearedLF[:, :, indView] = ip(curX, curY)
                 indView = indView + 1
         # computing the final mean and variance features for depth level using Eq. 6
@@ -221,7 +224,6 @@ def isnan(x):
 def prepare_color_features(depth, images, refPos):
     images = crop_img(images, param.depthBorder)
     warpedImages = warp_all_images(images, depth, refPos)
-    warpedImages = torch.from_numpy(warpedImages)
     if param.useGPU:
         warpedImages = warpedImages.cuda()
     warpedImages = warpedImages.float()
@@ -246,17 +248,16 @@ def read_illum_images(scenePath):
     inputImg = inputImg[:, :, 0:3]  # strip off Alpha layer
     inputImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)  # BGR to RGB
     inputImg = im2double(inputImg)
-    inputImg = torch.from_numpy(inputImg)
     h = inputImg.shape[0] // numImgsY
     w = inputImg.shape[1] // numImgsX
-    fullLF = torch.zeros((h, w, 3, numImgsY, numImgsX))
+    fullLF = np.zeros((h, w, 3, numImgsY, numImgsX), dtype=np.float)
     for ax in range(numImgsX):
         for ay in range(numImgsY):
             fullLF[:, :, :, ay, ax] = inputImg[ay::numImgsY, ax::numImgsX, :]
     if h == 375 and w == 540:
-        fullLF = F.pad(fullLF, ((0, 1), (0, 1), (0, 0), (0, 0), (0, 0)), mode='constant', constant_values=0)
+        fullLF = np.pad(fullLF, ((0, 1), (0, 1), (0, 0), (0, 0), (0, 0)), mode='constant', constant_values=0)
     if h == 375 and w == 541:
-        fullLF = F.pad(fullLF, ((0, 1), (0, 0), (0, 0), (0, 0), (0, 0)), mode='constant', constant_values=0)
+        fullLF = np.pad(fullLF, ((0, 1), (0, 0), (0, 0), (0, 0), (0, 0)), mode='constant', constant_values=0)
     fullLF = fullLF[:, :, :, 3:11, 3:11]
     inputLF = fullLF[:, :, :, 0:8:7, 0:8:7]
     return fullLF, inputLF
@@ -424,6 +425,7 @@ def prepare_test_data():
         [curFullLF, curInputLF] = read_illum_images(scenePaths[ns])
         print('Done')
         print('**********************************')
+
         print('Preparing test examples')
         print('------------------------------')
         [pInImgs, pInFeat, pRef, refPos] = compute_test_examples(curFullLF, curInputLF)
