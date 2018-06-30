@@ -5,8 +5,13 @@ Improved further with GAN proposed by a CVPR 2017 paper [Photo-Realistic Single 
 See the original implementation [here](https://github.com/GIMPS/lf_syn).
 
 ## Results
-non-GAN result:
-![n_Seahorse](https://thumbs.gfycat.com/AggravatingSomberConey-size_restricted.gif)
+Original model result:
+
+![Seahorse](https://thumbs.gfycat.com/AggravatingSomberConey-size_restricted.gif)
+
+GAN model result:
+
+![Seahorse](https://thumbs.gfycat.com/HandyPresentCapybara-size_restricted.gif)
 
 ## Requirments
 - Python 3.x
