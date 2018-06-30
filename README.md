@@ -3,6 +3,11 @@ A PyTorch implementation of a LF Camera View Synthesis method proposed by a SIGG
 Improved further with GAN proposed by a CVPR 2017 paper [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://arxiv.org/abs/1609.04802).
 
 See the original implementation [here](https://github.com/GIMPS/lf_syn).
+
+## Results
+
+![Seahorse](https://thumbs.gfycat.com/VigorousInferiorBluegill-size_restricted.gif)
+
 ## Requirments
 - Python 3.x
 - CUDA
