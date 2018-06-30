@@ -65,7 +65,7 @@ The output images and objective quality result are in `Results` directory.
 
 ## Results
 
-> Original model (iteration: 26,500; Training PSNR:33.36 ):
+> Original model (iteration: 26,500; Training PSNR: 33.36 ):
 
 - Seahorse (PSNR: 29.10; SSIM: 0.952)
 
