@@ -72,7 +72,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         # write the numerical evaluation and the final image
         if indY == 4 and indX == 4:
             write_error(curEst, curRef, resultPath)
-        img = curRef.cpu().numpy()
+        img = curEst.cpu().numpy()
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         imwrite(resultPath + '/Images_GAN/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(img) * 255).astype(int))
 
