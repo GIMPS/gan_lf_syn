@@ -1,11 +1,11 @@
 import time
+from math import log10
 
 import torch.optim as optim
 from torch.autograd import Variable
 
 from model import DepthNetModel, ColorNetModel, Discriminator
 from prepare_data import *
-from math import log10
 
 warnings.filterwarnings("ignore")
 import h5py
@@ -156,12 +156,12 @@ def evaluate_system(depth_net, color_net, d_net=None, depth_optimizer=None, colo
     if not isTraining:
         print('Evaluating depth network ...', end='')
         dTime = time.time()
-    depthFeatures = depthFeatures.permute(3, 2, 0, 1)  # todo
+    depthFeatures = depthFeatures.permute(3, 2, 0, 1)
     depthFeatures = Variable(depthFeatures, requires_grad=True)
     depthRes = depth_net(depthFeatures)
     depth = depthRes / (param.origAngRes - 1)
     depth = depth.data
-    depth = depth.permute(2, 3, 1, 0)  # todo
+    depth = depth.permute(2, 3, 1, 0)
     if not isTraining:
         print('Done in {:.0f} seconds'.format(time.time() - dTime))
 
@@ -184,7 +184,7 @@ def evaluate_system(depth_net, color_net, d_net=None, depth_optimizer=None, colo
     if not isTraining:
         print('Evaluating color network ...', end='')
         cfTime = time.time()
-    colorFeatures = colorFeatures.permute(3, 2, 0, 1)  # todo
+    colorFeatures = colorFeatures.permute(3, 2, 0, 1) 
     colorFeatures = Variable(colorFeatures, requires_grad=True)
     colorRes = color_net(colorFeatures)
 

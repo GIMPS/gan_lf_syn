@@ -93,7 +93,7 @@ def save_hdf(f, datasetName, input, inDims, startLoc, createFlag, arraySize=1):
     while input.shape[-1] == 1:
         input = input[..., 0]
 
-    dset.write_direct(input.astype('float32'), dest_sel=tuple(sliceIdx))  # todo: too slow!!
+    dset.write_direct(input.astype('float32'), dest_sel=tuple(sliceIdx))
     startLoc[-1] = startLoc[-1] + inDims[-1]
     return startLoc
 

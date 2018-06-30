@@ -2,7 +2,7 @@ from init_param import novelView
 from prepare_data import *
 
 warnings.filterwarnings("ignore")
-from train import load_networks, read_illum_images, evaluate_system, compute_psnr,param
+from train import load_networks, read_illum_images, evaluate_system, compute_psnr, param
 from skimage.color import rgb2hsv, hsv2rgb
 import pytorch_ssim
 from torch.autograd import Variable
@@ -49,7 +49,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         indX = get_img_ind(novelView.X[vi])
 
         curRefPos = np.array([[novelView.Y[vi]], [novelView.X[vi]]])
-        # curRefPos = np.expand_dims(curRefPos, axis=1)
+
         if param.useGPU:
             curRefPos = torch.from_numpy(curRefPos).cuda().float()
         else:
@@ -57,7 +57,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
 
         # performs the whole process of extracting features, evaluating the
         # two sequential networks and generating the output synthesized image
-        print('View %02d of %02d' % (vi+1, numNovelViews))
+        print('View %02d of %02d' % (vi + 1, numNovelViews))
         print('**********************************')
         synthesizedView = evaluate_system(depth_net, color_net, images=inputLF, refPos=curRefPos)
 

@@ -60,7 +60,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
 
         # performs the whole process of extracting features, evaluating the
         # two sequential networks and generating the output synthesized image
-        print('View %02d of %02d' % (vi+1, numNovelViews))
+        print('View %02d of %02d' % (vi + 1, numNovelViews))
         print('**********************************')
         synthesizedView = evaluate_system(depth_net, color_net, images=inputLF, refPos=curRefPos)
 
@@ -75,6 +75,7 @@ def synthesize_novel_views(depth_net, color_net, inputLF, fullLF, resultPath):
         img = curEst.cpu().numpy()
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         imwrite(resultPath + '/Images_GAN/' + ('%02d_%02d.png' % (indY, indX)), (adjust_tone(img) * 255).astype(int))
+
 
 def test_gan():
     # Initialization
