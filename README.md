@@ -89,3 +89,5 @@ The output images and objective quality result are in `Results` directory.
 - Move `prepare_data.py` onto GPU
 
    This will make training and testing tremendously faster. The key is to implement a cubic `interpolation` method with PyToch tensors to replace the Scipy one.
+   
+- Tune hyperparameter
