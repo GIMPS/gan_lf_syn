@@ -4,15 +4,6 @@ Improved further with GAN proposed by a CVPR 2017 paper [Photo-Realistic Single 
 
 See the original implementation [here](https://github.com/GIMPS/lf_syn).
 
-## Results
-Original model result:
-
-![Seahorse](https://thumbs.gfycat.com/AggravatingSomberConey-size_restricted.gif)
-
-GAN model result:
-
-![Seahorse](https://thumbs.gfycat.com/HandyPresentCapybara-size_restricted.gif)
-
 ## Requirments
 - Python 3.x
 - CUDA
@@ -70,6 +61,28 @@ can be found in `TestSet\PAPER` directory.
 python3 test_gan.py
 ```
 The output images and objective quality result are in `Results` directory.
+
+
+## Results
+> Original model result:
+
+- Seahorse (PSNR: 29.10; SSIM: 0.952)
+
+![n_Seahorse](https://thumbs.gfycat.com/AggravatingSomberConey-size_restricted.gif)
+
+- Flower1 (PSNR: 29.86; SSIM: 0.945)
+
+![n_Flower1](https://thumbs.gfycat.com/MixedAstonishingAndeancat-size_restricted.gif)
+
+> GAN model result:
+
+- Seahorse (PSNR: 30.23; SSIM: 0.947)
+
+![g_Seahorse](https://thumbs.gfycat.com/HandyPresentCapybara-size_restricted.gif)
+
+- Flower1 (PSNR: 30.51; SSIM: 0.940)
+
+![g_Flower1](https://thumbs.gfycat.com/PleasedComplicatedGartersnake-size_restricted.gif)
 
 ## To do list:
 - Move `prepare_data.py` onto GPU
