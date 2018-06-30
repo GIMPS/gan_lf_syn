@@ -64,7 +64,8 @@ The output images and objective quality result are in `Results` directory.
 
 
 ## Results
-> Original model result:
+
+> Original model (iteration: 26,500; Training PSNR:33.36 ):
 
 - Seahorse (PSNR: 29.10; SSIM: 0.952)
 
@@ -74,7 +75,7 @@ The output images and objective quality result are in `Results` directory.
 
 ![n_Flower1](https://thumbs.gfycat.com/MixedAstonishingAndeancat-size_restricted.gif)
 
-> GAN model result:
+> GAN model (iteration: 26,000; Training PSNR: 33.34):
 
 - Seahorse (PSNR: 30.23; SSIM: 0.947)
 
